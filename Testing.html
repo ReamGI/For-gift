@@ -602,5 +602,181 @@
     }
   }
 </script>
+ <!-- QUIZ OVERLAY -->
+<div id="quizOverlay" style="display:none; position:fixed; inset:0; z-index:99998;
+  background:#0d0608; font-family:'Cormorant Garamond',serif; overflow-y:auto;">
+
+  <!-- INTRO -->
+  <div class="qz-screen active" id="qz-intro">
+    <div style="font-size:52px; margin-bottom:20px;">🌸</div>
+    <p class="qz-tag">For Sreyroth, from Ream</p>
+    <h1 class="qz-title">Our Goals & Dreams</h1>
+    <p class="qz-sub">6 questions about us — our future, our wishes, our heart.<br>Take your time, babe.</p>
+    <button class="qz-btn primary" onclick="qzStart()">Let's begin ♡</button>
+    <button class="qz-btn" onclick="closeQuiz()" style="margin-top:16px; opacity:0.45;">✕ Close</button>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="qz-screen" id="qz-question">
+    <div class="qz-progress" id="qz-dots"></div>
+    <div class="qz-section-badge" id="qz-badge"></div>
+    <p class="qz-question" id="qz-q-text"></p>
+    <textarea class="qz-textarea" id="qz-answer" placeholder="Write your heart out..."></textarea>
+    <div style="display:flex; gap:12px;">
+      <button class="qz-btn primary" onclick="qzNext()" id="qz-next-btn">Next →</button>
+    </div>
+    <p id="qz-warn" style="color:#c2858e; font-style:italic; font-size:14px;
+      margin-top:12px; min-height:20px;"></p>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="qz-screen" id="qz-result" style="padding-bottom:60px;">
+    <p class="qz-tag">Sreyroth answered</p>
+    <h1 class="qz-title" style="margin-bottom:28px;">Her heart says...</h1>
+    <div id="qz-answers-list" style="width:100%; max-width:520px;"></div>
+    <p style="font-size:17px; font-style:italic; color:#9a606a; margin-top:24px;
+      line-height:1.7; max-width:400px; text-align:center;">
+      "Thank you for answering these, babe.<br>This means everything to me. — Ream ♡"
+    </p>
+    <button class="qz-btn" onclick="closeQuiz()" style="margin-top:28px;">✕ Close</button>
+  </div>
+
+</div>
+
+<!-- QUIZ OPEN BUTTON -->
+<button onclick="openQuiz()" style="position:fixed; bottom:148px; right:24px;
+  width:52px; height:52px; border-radius:50%; background:rgba(232,144,154,0.18);
+  border:1px solid rgba(232,144,154,0.35); color:#f9dde2; font-size:22px;
+  cursor:pointer; backdrop-filter:blur(10px); z-index:9999;" aria-label="Open quiz">
+  🌸
+</button>
+
+<style>
+  .qz-screen { display:none; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100vh; padding:60px 28px; text-align:center; }
+  .qz-screen.active { display:flex; }
+  .qz-tag { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#c2858e; margin-bottom:14px; }
+  .qz-title { font-family:'Playfair Display',serif; font-size:clamp(30px,5vw,46px);
+    font-style:italic; color:#f9dde2; margin-bottom:12px; }
+  .qz-sub { font-size:17px; font-style:italic; color:#9a606a; margin-bottom:40px;
+    line-height:1.7; max-width:380px; }
+  .qz-btn { background:rgba(232,144,154,0.12); border:1px solid rgba(232,144,154,0.35);
+    color:#f9dde2; font-family:'Cormorant Garamond',serif; font-size:17px; font-style:italic;
+    padding:14px 40px; border-radius:50px; cursor:pointer; transition:all 0.3s; margin:6px; }
+  .qz-btn:hover { background:rgba(232,144,154,0.26); }
+  .qz-btn.primary { background:rgba(232,144,154,0.22); border-color:rgba(232,144,154,0.6); }
+  .qz-progress { display:flex; gap:10px; margin-bottom:32px; }
+  .qz-dot { width:9px; height:9px; border-radius:50%; background:rgba(232,144,154,0.18); transition:background 0.4s; }
+  .qz-dot.done { background:#e8909a; }
+  .qz-section-badge { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#c2858e;
+    padding:5px 18px; border:1px solid rgba(194,133,142,0.3); border-radius:50px; margin-bottom:22px; }
+  .qz-question { font-family:'Playfair Display',serif; font-size:clamp(20px,3.5vw,28px);
+    font-style:italic; color:#f9dde2; margin-bottom:4px; line-height:1.45; max-width:480px; }
+  .qz-textarea { width:100%; max-width:500px; height:140px; background:rgba(255,255,255,0.04);
+    border:1px solid rgba(232,144,154,0.22); border-radius:16px; color:#f0ccd2;
+    font-family:'Cormorant Garamond',serif; font-size:18px; font-style:italic;
+    line-height:1.85; padding:18px; resize:none; outline:none; margin:22px 0; }
+  .qz-textarea::placeholder { color:#5a3540; }
+  .qz-answer-card { background:rgba(255,255,255,0.03); border:1px solid rgba(232,144,154,0.18);
+    border-radius:18px; padding:22px 26px; max-width:520px; width:100%;
+    margin-bottom:14px; text-align:left; }
+  .qz-answer-q { font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    color:#c2858e; margin-bottom:10px; }
+  .qz-answer-a { font-size:18px; font-style:italic; color:#f0ccd2; line-height:1.75; }
+</style>
+
+<script>
+  const QZ_API_KEY = '$2a$10$3VIiKGEGoAEglQXHiOVlXO6QZWF8MePlaeNFMo8hHhkqdSbMn5uB2'; // ← paste your regenerated key here
+
+  const qzQuestions = [
+    { section: 'Our Goals',   q: 'What is our biggest goal you have in mind?' },
+    { section: 'Our Goals',   q: 'Do you think we can get along deeper?' },
+    { section: 'Our Goals',   q: 'What do you like about me the most?' },
+    { section: 'Bucket List', q: 'What is the first country you want us to visit?' },
+    { section: 'Bucket List', q: 'Can we have another date? Like a bigger one — what would it be?' },
+    { section: 'Bucket List', q: 'In the future, what activity do you want to share with me?' }
+  ];
+
+  let qzCurrent = 0;
+  const qzAnswers = [];
+
+  function openQuiz() {
+    document.getElementById('quizOverlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeQuiz() {
+    document.getElementById('quizOverlay').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function qzShow(id) {
+    document.querySelectorAll('.qz-screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function qzStart() {
+    qzCurrent = 0;
+    qzAnswers.length = 0;
+    qzShow('qz-question');
+    qzRender();
+  }
+
+  function qzRender() {
+    const dots = document.getElementById('qz-dots');
+    dots.innerHTML = qzQuestions.map((_, i) =>
+      `<div class="qz-dot ${i < qzCurrent ? 'done' : ''}"></div>`).join('');
+    document.getElementById('qz-badge').textContent = qzQuestions[qzCurrent].section;
+    document.getElementById('qz-q-text').textContent = qzQuestions[qzCurrent].q;
+    document.getElementById('qz-answer').value = qzAnswers[qzCurrent] || '';
+    document.getElementById('qz-warn').textContent = '';
+    document.getElementById('qz-next-btn').textContent =
+      qzCurrent === qzQuestions.length - 1 ? 'See our answers ♡' : 'Next →';
+  }
+
+  function qzNext() {
+    const val = document.getElementById('qz-answer').value.trim();
+    if (!val) { document.getElementById('qz-warn').textContent = 'Please write something first 💕'; return; }
+    qzAnswers[qzCurrent] = val;
+    qzCurrent++;
+    if (qzCurrent < qzQuestions.length) { qzRender(); }
+    else { qzShowResults(); }
+  }
+
+  async function qzShowResults() {
+    const list = document.getElementById('qz-answers-list');
+    list.innerHTML = qzQuestions.map((q, i) => `
+      <div class="qz-answer-card">
+        <p class="qz-answer-q">${q.section} · Q${i + 1}</p>
+        <p class="qz-answer-a">"${qzAnswers[i]}"</p>
+      </div>`).join('');
+    qzShow('qz-result');
+
+    // Save to JSONBin
+    const data = {
+      completedOn: new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }),
+      answers: qzQuestions.map((q, i) => ({ question: q.q, section: q.section, answer: qzAnswers[i] }))
+    };
+    try {
+      const existingId = localStorage.getItem('qzBinId');
+      if (existingId) {
+        await fetch(`https://api.jsonbin.io/v3/b/${existingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': QZ_API_KEY },
+          body: JSON.stringify(data)
+        });
+      } else {
+        const res = await fetch('https://api.jsonbin.io/v3/b', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': QZ_API_KEY,
+            'X-Bin-Name': 'anniversary-quiz', 'X-Bin-Private': 'false' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        localStorage.setItem('qzBinId', json.metadata.id);
+      }
+    } catch(e) { console.error('Could not save quiz:', e); }
+  }
+</script>
 </body>
 </html>
