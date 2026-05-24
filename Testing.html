@@ -244,66 +244,110 @@
     <p class="closing-names">Sreyroth 🌸 Ream</p>
     <div class="hearts-float"><span>🌷</span><span>💕</span><span>🌻</span><span>💕</span><span>🌹</span></div>
   </div>
-<!-- SMS REPLY SECTION -->
-<div class="sms-section">
-  <p class="radio-label-top" style="margin-top:64px;">Write back to him</p>
-  <h2 style="font-family:'Playfair Display',serif;font-size:26px;font-style:italic;color:#f9dde2;margin-bottom:8px;">A Letter for Ream 💌</h2>
-  <p style="font-size:16px;font-style:italic;color:#9a606a;margin-bottom:28px;">Send your heart in a message</p>
+<!-- LETTER SAVE/VIEW SYSTEM -->
+<div id="letterPanel" style="
+  position:fixed; bottom:24px; left:24px; z-index:9999;
+  display:flex; flex-direction:column; align-items:flex-start; gap:10px;">
 
-  <div class="message-card" style="text-align:left;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(200,133,142,0.15);">
-      <span style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c2858e;">To</span>
-      <input id="phoneInput" type="tel" placeholder="Ream's phone number…"
-        style="flex:1;background:transparent;border:none;border-bottom:1px solid rgba(200,133,142,0.3);outline:none;color:#f9dde2;font-family:'Cormorant Garamond',serif;font-size:17px;padding:4px 8px;" />
-    </div>
+  <div id="letterBox" style="display:none;
+    background:rgba(13,6,8,0.95); border:1px solid rgba(232,144,154,0.4);
+    border-radius:16px; padding:24px; max-width:320px;
+    font-family:'Cormorant Garamond',serif; color:#f0ccd2; font-size:15px;
+    line-height:1.7; backdrop-filter:blur(12px);">
+    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;
+      color:#c2858e;margin-bottom:12px;">💌 Saved Letter</p>
+    <div id="letterContent"></div>
+    <p id="letterDate" style="margin-top:12px;font-size:12px;
+      color:#9a606a;font-style:italic;"></p>
+  </div>
 
-    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c2858e;margin-bottom:10px;">Quick words</p>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">
-      <span class="quick-pill" onclick="append('I love you so much 💕')">I love you so much 💕</span>
-      <span class="quick-pill" onclick="append('Happy 2 months, my favorite person 🌹')">Happy 2 months 🌹</span>
-      <span class="quick-pill" onclick="append('Thank you for choosing me every day ♡')">Thank you for choosing me ♡</span>
-      <span class="quick-pill" onclick="append('You make everything better 🌸')">You make everything better 🌸</span>
-    </div>
-
-    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c2858e;margin-bottom:10px;">Your message</p>
-    <textarea id="msgArea" oninput="updateCount()" placeholder="Type your heart out, Sreyroth…"
-      style="width:100%;background:transparent;border:none;outline:none;resize:none;color:#f0ccd2;font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.75;min-height:130px;"></textarea>
-    <p id="charCount" style="font-size:12px;color:#6a4a50;text-align:right;margin-top:4px;">0 characters</p>
-
-    <div style="text-align:center;margin-top:20px;">
-      <button onclick="sendSms()"
-        style="background:rgba(232,144,154,0.12);border:1px solid rgba(232,144,154,0.4);border-radius:50px;color:#f9dde2;font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;padding:14px 36px;cursor:pointer;">
-        Send via SMS 💌
-      </button>
-    </div>
+  <div style="display:flex;gap:8px;">
+    <button onclick="saveLetter()" style="
+      background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
+      color:#f9dde2; font-size:13px; padding:10px 16px; border-radius:50px;
+      cursor:pointer; backdrop-filter:blur(10px); font-family:'Cormorant Garamond',serif;">
+      💾 Save Letter
+    </button>
+    <button onclick="viewLetter()" style="
+      background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
+      color:#f9dde2; font-size:13px; padding:10px 16px; border-radius:50px;
+      cursor:pointer; backdrop-filter:blur(10px); font-family:'Cormorant Garamond',serif;">
+      💌 View Saved
+    </button>
   </div>
 </div>
 
-<style>
-  .quick-pill{background:rgba(200,100,115,0.07);border:1px solid rgba(200,120,130,0.2);border-radius:50px;padding:6px 16px;font-size:13px;font-style:italic;color:#c2858e;cursor:pointer;transition:all 0.2s;}
-  .quick-pill:hover{background:rgba(232,144,154,0.15);border-color:#e8909a;color:#f0ccd2;}
-</style>
-
 <script>
-  function updateCount(){
-    const t=document.getElementById('msgArea').value;
-    document.getElementById('charCount').textContent=t.length+' character'+(t.length!==1?'s':'');
+  const JSONBIN_API_KEY = '$2a$10$3VIiKGEGoAEglQXHiOVlXO6QZWF8MePlaeNFMo8hHhkqdSbMn5uB2'; // ← paste your key here
+  const BIN_NAME = 'anniversary-letter';
+
+  // The two message texts from your page
+  const letterData = {
+    savedOn: new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }),
+    messages: [
+      {
+        from: "So this is how it's started, haha",
+        text: "At first I was just a guy who dislike talking, likely introverted. But one day I feeling more brave and start to open up. There, I saw your profile and you mentioned that you want a person that live in SiemReap so I try. That day I was busy at work so I didn't reply on time, luckily I did, otherwise we couldn't matched up. So then everyday went smoothly day after days. And now here we are!"
+      },
+      {
+        from: "With all my heart, Ream",
+        text: "Wow! Two months already? It may feel short to the world, but to me it feels like I've found the warmest corner of the universe and that corner is you, Sreyroth. Every single day with you is a gift I don't take for granted. I cant thanks you enough for how much you treated me, I thought love was just something is for fun but it's different, it's can be serious in my perspective. Thank you, babe!"
+      }
+    ]
+  };
+
+  async function saveLetter() {
+    try {
+      // Create a new bin
+      const res = await fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': JSONBIN_API_KEY,
+          'X-Bin-Name': BIN_NAME,
+          'X-Bin-Private': 'false'
+        },
+        body: JSON.stringify(letterData)
+      });
+
+      const data = await res.json();
+      const binId = data.metadata.id;
+
+      // Save the bin ID locally so you can retrieve it
+      localStorage.setItem('letterBinId', binId);
+      alert('💌 Letter saved! You can view it anytime with "View Saved".');
+    } catch (e) {
+      alert('Could not save. Check your API key.');
+      console.error(e);
+    }
   }
-  function append(text){
-    const a=document.getElementById('msgArea');
-    a.value=(a.value?a.value+' ':'')+text;
-    a.focus();updateCount();
-  }
-  function sendSms(){
-    const phone=document.getElementById('phoneInput').value.replace(/\s+/g,'');
-    const msg=document.getElementById('msgArea').value.trim();
-    if(!msg){alert('Write something first, Sreyroth 💕');return;}
-    const encoded=encodeURIComponent(msg);
-    const ua=navigator.userAgent;
-    let url=(/android/i.test(ua))
-      ?(phone?`sms:${phone}?body=${encoded}`:`sms:?body=${encoded}`)
-      :(phone?`sms:${phone}&body=${encoded}`:`sms:&body=${encoded}`);
-    window.location.href=url;
+
+  async function viewLetter() {
+    const binId = localStorage.getItem('letterBinId');
+    if (!binId) { alert('No saved letter found. Click "Save Letter" first!'); return; }
+
+    try {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_API_KEY }
+      });
+      const data = await res.json();
+      const letter = data.record;
+
+      const box = document.getElementById('letterBox');
+      const content = document.getElementById('letterContent');
+      const dateEl = document.getElementById('letterDate');
+
+      content.innerHTML = letter.messages.map(m => `
+        <p style="margin-bottom:14px;font-style:italic;">"${m.text}"</p>
+        <p style="font-size:12px;color:#9a606a;margin-bottom:18px;">— ${m.from}</p>
+      `).join('');
+
+      dateEl.textContent = `Saved on ${letter.savedOn}`;
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    } catch (e) {
+      alert('Could not load letter.');
+      console.error(e);
+    }
   }
 </script>
   <!-- RADIO FINALE -->
