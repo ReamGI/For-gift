@@ -461,11 +461,12 @@
     }
   });
 </script>
- <!-- LETTER SAVE/VIEW SYSTEM -->
+<!-- LETTER SAVE/VIEW SYSTEM -->
 <div id="letterPanel" style="
   position:fixed; bottom:24px; left:24px; z-index:9999;
   display:flex; flex-direction:column; align-items:flex-start; gap:10px;">
 
+  <!-- Saved letter view -->
   <div id="letterBox" style="display:none;
     background:rgba(13,6,8,0.95); border:1px solid rgba(232,144,154,0.4);
     border-radius:16px; padding:24px; max-width:320px;
@@ -478,12 +479,34 @@
       color:#9a606a;font-style:italic;"></p>
   </div>
 
-  <div style="display:flex;gap:8px;">
+  <!-- Write area -->
+  <div id="writeBox" style="display:none;
+    background:rgba(13,6,8,0.95); border:1px solid rgba(232,144,154,0.4);
+    border-radius:16px; padding:24px; max-width:320px; width:320px;
+    font-family:'Cormorant Garamond',serif; backdrop-filter:blur(12px);">
+    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;
+      color:#c2858e;margin-bottom:12px;">✍️ Write Your Letter</p>
+    <textarea id="letterInput" placeholder="Write something to remember..." style="
+      width:100%; height:160px; background:rgba(255,255,255,0.04);
+      border:1px solid rgba(232,144,154,0.25); border-radius:10px;
+      color:#f0ccd2; font-family:'Cormorant Garamond',serif; font-size:15px;
+      line-height:1.7; padding:12px; resize:none; outline:none;"></textarea>
     <button onclick="saveLetter()" style="
+      margin-top:12px; width:100%;
+      background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
+      color:#f9dde2; font-size:14px; padding:10px 16px; border-radius:50px;
+      cursor:pointer; font-family:'Cormorant Garamond',serif;">
+      💾 Save
+    </button>
+  </div>
+
+  <!-- Buttons -->
+  <div style="display:flex;gap:8px;">
+    <button onclick="toggleWrite()" style="
       background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
       color:#f9dde2; font-size:13px; padding:10px 16px; border-radius:50px;
       cursor:pointer; backdrop-filter:blur(10px); font-family:'Cormorant Garamond',serif;">
-      💾 Save Letter
+      ✍️ Write
     </button>
     <button onclick="viewLetter()" style="
       background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
@@ -495,44 +518,56 @@
 </div>
 
 <script>
-  const JSONBIN_API_KEY = '$2a$10$3VIiKGEGoAEglQXHiOVlXO6QZWF8MePlaeNFMo8hHhkqdSbMn5uB2'; // ← paste your key here
+  const JSONBIN_API_KEY = '$2a$10$3VIiKGEGoAEglQXHiOVlXO6QZWF8MePlaeNFMo8hHhkqdSbMn5uB2'; // ← your key here
   const BIN_NAME = 'anniversary-letter';
 
-  // The two message texts from your page
-  const letterData = {
-    savedOn: new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }),
-    messages: [
-      {
-        from: "So this is how it's started, haha",
-        text: "At first I was just a guy who dislike talking, likely introverted. But one day I feeling more brave and start to open up. There, I saw your profile and you mentioned that you want a person that live in SiemReap so I try. That day I was busy at work so I didn't reply on time, luckily I did, otherwise we couldn't matched up. So then everyday went smoothly day after days. And now here we are!"
-      },
-      {
-        from: "With all my heart, Ream",
-        text: "Wow! Two months already? It may feel short to the world, but to me it feels like I've found the warmest corner of the universe and that corner is you, Sreyroth. Every single day with you is a gift I don't take for granted. I cant thanks you enough for how much you treated me, I thought love was just something is for fun but it's different, it's can be serious in my perspective. Thank you, babe!"
-      }
-    ]
-  };
+  function toggleWrite() {
+    const wb = document.getElementById('writeBox');
+    const lb = document.getElementById('letterBox');
+    lb.style.display = 'none';
+    wb.style.display = wb.style.display === 'none' ? 'block' : 'none';
+  }
 
   async function saveLetter() {
+    const text = document.getElementById('letterInput').value.trim();
+    if (!text) { alert('Write something first! 💌'); return; }
+
+    const letterData = {
+      savedOn: new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }),
+      message: text
+    };
+
     try {
-      // Create a new bin
-      const res = await fetch('https://api.jsonbin.io/v3/b', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': JSONBIN_API_KEY,
-          'X-Bin-Name': BIN_NAME,
-          'X-Bin-Private': 'false'
-        },
-        body: JSON.stringify(letterData)
-      });
+      const existingId = localStorage.getItem('letterBinId');
 
-      const data = await res.json();
-      const binId = data.metadata.id;
+      if (existingId) {
+        // Update existing bin
+        await fetch(`https://api.jsonbin.io/v3/b/${existingId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_API_KEY
+          },
+          body: JSON.stringify(letterData)
+        });
+      } else {
+        // Create new bin
+        const res = await fetch('https://api.jsonbin.io/v3/b', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_API_KEY,
+            'X-Bin-Name': BIN_NAME,
+            'X-Bin-Private': 'false'
+          },
+          body: JSON.stringify(letterData)
+        });
+        const data = await res.json();
+        localStorage.setItem('letterBinId', data.metadata.id);
+      }
 
-      // Save the bin ID locally so you can retrieve it
-      localStorage.setItem('letterBinId', binId);
-      alert('💌 Letter saved! You can view it anytime with "View Saved".');
+      alert('💌 Letter saved!');
+      document.getElementById('writeBox').style.display = 'none';
     } catch (e) {
       alert('Could not save. Check your API key.');
       console.error(e);
@@ -541,7 +576,10 @@
 
   async function viewLetter() {
     const binId = localStorage.getItem('letterBinId');
-    if (!binId) { alert('No saved letter found. Click "Save Letter" first!'); return; }
+    if (!binId) { alert('No saved letter yet. Click ✍️ Write first!'); return; }
+
+    const wb = document.getElementById('writeBox');
+    wb.style.display = 'none';
 
     try {
       const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
@@ -550,16 +588,12 @@
       const data = await res.json();
       const letter = data.record;
 
+      document.getElementById('letterContent').innerHTML = `
+        <p style="font-style:italic;line-height:1.8;">"${letter.message}"</p>
+      `;
+      document.getElementById('letterDate').textContent = `Saved on ${letter.savedOn}`;
+
       const box = document.getElementById('letterBox');
-      const content = document.getElementById('letterContent');
-      const dateEl = document.getElementById('letterDate');
-
-      content.innerHTML = letter.messages.map(m => `
-        <p style="margin-bottom:14px;font-style:italic;">"${m.text}"</p>
-        <p style="font-size:12px;color:#9a606a;margin-bottom:18px;">— ${m.from}</p>
-      `).join('');
-
-      dateEl.textContent = `Saved on ${letter.savedOn}`;
       box.style.display = box.style.display === 'none' ? 'block' : 'none';
     } catch (e) {
       alert('Could not load letter.');
