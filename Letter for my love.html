@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2 Months with You 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: #0d0608;
+    color: #f5e6ea;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite alternate; animation-delay: var(--delay, 0s); }
+  @keyframes twinkle { from { opacity: 0.1; transform: scale(0.8); } to { opacity: 0.9; transform: scale(1.2); } }
+  .petals-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: hidden; }
+  .petal { position: absolute; top: -20px; animation: fall linear infinite; opacity: 0.7; }
+  @keyframes fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 0.7; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+  .page { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; padding: 60px 32px 80px; text-align: center; }
+  .tag-line { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 4px; color: #c2858e; text-transform: uppercase; margin-bottom: 20px; animation: fadeUp 1s ease both; }
+  .headline { font-family: 'Playfair Display', serif; font-size: clamp(42px, 8vw, 72px); font-weight: 700; line-height: 1.1; color: #f9dde2; margin-bottom: 8px; animation: fadeUp 1s ease 0.15s both; }
+  .headline span { color: #e8909a; font-style: italic; }
+  .sub-headline { font-family: 'Playfair Display', serif; font-size: clamp(18px, 3.5vw, 28px); font-style: italic; color: #c2858e; margin-bottom: 48px; animation: fadeUp 1s ease 0.3s both; }
+  .divider { display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 48px; animation: fadeUp 1s ease 0.4s both; }
+  .divider-line { flex: 1; max-width: 80px; height: 1px; background: linear-gradient(to right, transparent, #c2858e); }
+  .divider-line.right { background: linear-gradient(to left, transparent, #c2858e); }
+  .divider-rose { font-size: 22px; }
+  .names-block { background: rgba(200, 100, 115, 0.07); border: 1px solid rgba(200, 120, 130, 0.2); border-radius: 20px; padding: 36px 40px; margin-bottom: 48px; animation: fadeUp 1s ease 0.5s both; position: relative; overflow: hidden; }
+  .names-block::before { content: ''; position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(232, 144, 154, 0.15), transparent 70%); border-radius: 50%; }
+  .names-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #c2858e; margin-bottom: 16px; }
+  .names-row { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .name { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 700; color: #f9dde2; }
+  .name.accent { color: #e8909a; font-style: italic; }
+  .amp { font-family: 'Playfair Display', serif; font-style: italic; font-size: 32px; color: #c2858e; }
+  .heart-counter { display: flex; flex-direction: column; align-items: center; margin-bottom: 52px; animation: fadeUp 1s ease 0.6s both; }
+  .counter-number { font-family: 'Playfair Display', serif; font-size: 100px; font-weight: 700; color: #e8909a; line-height: 1; letter-spacing: -4px; animation: heartbeat 2s ease-in-out infinite; }
+  @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+  .counter-label { font-size: 16px; letter-spacing: 6px; text-transform: uppercase; color: #c2858e; margin-top: 4px; }
+  .counter-sub { font-style: italic; font-size: 18px; color: #9a606a; margin-top: 6px; }
+  .message-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(200, 133, 142, 0.15); border-radius: 20px; padding: 40px 36px; margin-bottom: 48px; animation: fadeUp 1s ease 0.75s both; }
+  .message-quote { font-size: clamp(18px, 3vw, 24px); font-style: italic; line-height: 1.75; color: #f0ccd2; margin-bottom: 20px; }
+  .message-from { font-size: 14px; letter-spacing: 3px; text-transform: uppercase; color: #9a606a; }
+  .moments-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 52px; animation: fadeUp 1s ease 0.9s both; }
+  .moment-tile { background: rgba(200, 100, 115, 0.06); border: 1px solid rgba(200, 120, 130, 0.15); border-radius: 14px; padding: 24px 16px; transition: transform 0.3s, border-color 0.3s; }
+  .moment-tile:hover { transform: translateY(-4px); border-color: rgba(232, 144, 154, 0.4); }
+  .moment-icon { font-size: 28px; display: block; margin-bottom: 10px; }
+  .moment-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: #f9dde2; margin-bottom: 4px; }
+  .moment-desc { font-size: 13px; font-style: italic; color: #9a606a; line-height: 1.4; }
+  .promise-section { margin-bottom: 52px; animation: fadeUp 1s ease 1s both; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 22px; font-style: italic; color: #f0ccd2; margin-bottom: 24px; }
+  .promises { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+  .promise-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; background: rgba(200, 100, 115, 0.05); border-left: 2px solid #e8909a; border-radius: 0 10px 10px 0; }
+  .promise-dot { color: #e8909a; font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .promise-text { font-size: 16px; line-height: 1.6; color: #f0ccd2; font-style: italic; }
+  .closing { animation: fadeUp 1s ease 1.1s both; padding: 40px 0 20px; }
+  .closing-main { font-family: 'Playfair Display', serif; font-size: clamp(24px, 4.5vw, 38px); font-style: italic; color: #f9dde2; margin-bottom: 16px; line-height: 1.3; }
+  .closing-names { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: #c2858e; }
+  .hearts-float { display: flex; justify-content: center; gap: 10px; margin-top: 32px; font-size: 20px; animation: pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+  /* RADIO SECTION */
+  .radio-section { margin-top: 64px; padding-top: 52px; border-top: 1px solid rgba(200, 120, 130, 0.15); animation: fadeUp 1s ease 1.2s both; }
+  .radio-label-top { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #c2858e; margin-bottom: 10px; }
+  .radio-hint { font-size: 15px; font-style: italic; color: #9a606a; margin-bottom: 32px; transition: opacity 0.4s; }
+  .radio-stage { display: flex; flex-direction: column; align-items: center; position: relative; min-height: 300px; }
+  .spark-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+  .spark { position: absolute; border-radius: 50%; pointer-events: none; animation: sparkfly 0.8s ease-out forwards; }
+  @keyframes sparkfly { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
+  .radio-btn { background: none; border: none; cursor: pointer; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+  .radio-body { width: 180px; height: 180px; border-radius: 50%; background: #1a0d10; border: 3px solid #e8909a; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: border-color 0.3s; }
+  .radio-btn:hover .radio-body { border-color: #f0b8c0; }
+  .radio-emoji { font-size: 50px; line-height: 1; margin-bottom: 6px; }
+  .radio-sub { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #e8909a; font-family: sans-serif; }
+  .click-dots { display: flex; gap: 10px; margin-top: 20px; }
+  .cdot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid #e8909a; background: transparent; transition: background 0.3s, transform 0.3s; }
+  .cdot.filled { background: #e8909a; transform: scale(1.3); }
+  @keyframes bounce { 0% { transform: translateY(0) scale(1); } 25% { transform: translateY(-30px) scale(1.08); } 50% { transform: translateY(0) scale(1); } 65% { transform: translateY(-10px) scale(1.03); } 80% { transform: translateY(0) scale(1); } 100% { transform: translateY(0) scale(1); } }
+  @keyframes explode { 0% { transform: scale(1) rotate(0deg); opacity: 1; } 20% { transform: scale(1.2) rotate(-8deg); opacity: 1; } 40% { transform: scale(1.5) rotate(8deg); opacity: 0.9; } 65% { transform: scale(2) rotate(-4deg); opacity: 0.5; } 100% { transform: scale(3); opacity: 0; } }
+  .bouncing .radio-body { animation: bounce 0.65s cubic-bezier(0.36,0.07,0.19,0.97); }
+  .exploding .radio-body { animation: explode 0.85s ease-in forwards; pointer-events: none; }
+  .star-particle { position: absolute; pointer-events: none; animation: starOut 0.9s ease-out forwards; }
+  @keyframes starOut { 0% { opacity: 1; transform: translate(-50%,-50%) rotate(var(--a)) translateX(0) scale(0.5); } 60% { opacity: 1; transform: translate(-50%,-50%) rotate(var(--a)) translateX(80px) scale(1.2); } 100% { opacity: 0; transform: translate(-50%,-50%) rotate(var(--a)) translateX(120px) scale(0); } }
+  .redirect-msg { margin-top: 28px; font-size: 16px; font-style: italic; color: #e8909a; opacity: 0; animation: fadeInUp 0.6s ease 0.5s forwards; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 480px) { .moments-grid { grid-template-columns: repeat(2, 1fr); } .names-row { gap: 12px; } .page { padding: 40px 20px 60px; } }
+</style>
+
+<div class="stars" id="stars"></div>
+<div class="petals-layer" id="petals"></div>
+
+<div class="page">
+
+  <p class="tag-line">A love letter to two months of us</p>
+  <h1 class="headline">Happy <span>2nd Month</span></h1>
+  <p class="sub-headline">Anniversary, my love 🌹</p>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-rose">🌸</span>
+    <div class="divider-line right"></div>
+  </div>
+
+  <div class="names-block">
+    <p class="names-label">Celebrating</p>
+    <div class="names-row">
+      <span class="name accent">Sreyroth</span>
+      <span class="amp">&amp;</span>
+      <span class="name">Ream</span>
+    </div>
+  </div>
+
+  <div class="heart-counter">
+    <div class="counter-number">2</div>
+    <div class="counter-label">Months Together</div>
+    <div class="counter-sub">of smiles, stories, and you</div>
+  </div>
+
+  <div class="message-card">
+    <p class="message-quote">"At first I was just a guy who dislike talking, likely introverted. But one day I feeling more brave and start to open up. There, I saw your profile and you mentioned that you want a person that live in SiemReap so I try. That day I was busy at work so I didn't reply on time, luckily I did, otherwise we couldn't matched up. So then everyday when smoothly day after days. And now here we are!"</p>
+    <p class="message-from">— So this is how it's started, haha</p>
+  </div>
+
+  <div class="message-card">
+    <p class="message-quote">"Wow! Two months already? It may feel short to the world, but to me it feels like I've found the warmest corner of the universe and that corner is you, Sreyroth. Every single day with you is a gift I don't take for granted. I cant thanks you enough for how much you treated me, I thought love was just something is for fun but it's different, it's can be serious in my perspective. Thank you, babe!"</p>
+    <p class="message-from">— With all my heart, Ream</p>
+  </div>
+
+  <div class="moments-grid">
+    <div class="moment-tile"><span class="moment-icon">💬</span><div class="moment-title">Our Conversations</div><div class="moment-desc">Every message, every laugh. Distance is our enemy</div></div>
+    <div class="moment-tile"><span class="moment-icon">🌙</span><div class="moment-title">Late Nights</div><div class="moment-desc">Play game together</div></div>
+    <div class="moment-tile"><span class="moment-icon">🌸</span><div class="moment-title">Little Things</div><div class="moment-desc">That mean everything</div></div>
+    <div class="moment-tile"><span class="moment-icon">😂</span><div class="moment-title">Our Jokes</div><div class="moment-desc">I'm too old for this but still learning</div></div>
+    <div class="moment-tile"><span class="moment-icon">🤝</span><div class="moment-title">Being There</div><div class="moment-desc">Through everything, always</div></div>
+    <div class="moment-tile"><span class="moment-icon">✨</span><div class="moment-title">Just Us</div><div class="moment-desc">My favourite thing to be</div></div>
+  </div>
+<!-- PHOTO MEMORIES -->
+<div class="photo-section">
+
+  <h2 class="photo-title">Our Little Memories ✨</h2>
+
+  <div class="photo-grid">
+
+    <div class="photo-card">
+      <div class="photo-placeholder">
+        <img src="https://drive.google.com/uc?export=view&id=1GQhSwaO6mf27yimFPGfrIOfs9UBZEDTM" alt="Our Smile">
+      </div>
+      <p class="photo-label">Our Smile</p>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-placeholder">
+        <img src="https://drive.google.com/uc?export=view&id=1Y92ewhWGPP_vf-iPWh0Ra0DRn7gfWuae" alt="My Favorite Smile">
+      </div>
+      <p class="photo-label">My Favorite Smile</p>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-placeholder">
+        <img src="https://drive.google.com/uc?export=view&id=18nE_DPG_5cHlmfsZs0N8Jnwb93xHf_wO" alt="To Forever">
+      </div>
+      <p class="photo-label">To Forever</p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.photo-section{
+  margin-bottom: 60px;
+  animation: fadeUp 1s ease 0.95s both;
+}
+
+.photo-title{
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #f9dde2;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:18px;
+}
+
+.photo-card{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(232,144,154,0.15);
+  border-radius: 18px;
+  overflow:hidden;
+  transition: transform 0.3s ease;
+}
+
+.photo-card:hover{
+  transform: translateY(-5px);
+}
+
+.photo-placeholder{
+  width:100%;
+  aspect-ratio: 1 / 1.2;
+  overflow:hidden;
+  background: rgba(232,144,154,0.08);
+}
+
+.photo-placeholder img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+.photo-label{
+  padding:14px;
+  text-align:center;
+  font-size:16px;
+  color:#f0ccd2;
+  font-style:italic;
+}
+
+@media (max-width: 700px){
+  .photo-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+  <div class="promise-section">
+    <h2 class="section-title">What I promise you, Sreyroth</h2>
+    <div class="promises">
+      <div class="promise-item"><span class="promise-dot">♡</span><p class="promise-text">To always make you smile, even on your hardest days after work.</p></div>
+      <div class="promise-item"><span class="promise-dot">♡</span><p class="promise-text">To be your safe place, always no judgment, just love.</p></div>
+      <div class="promise-item"><span class="promise-dot">♡</span><p class="promise-text">To choose you, again and again, every single day.</p></div>
+      <div class="promise-item"><span class="promise-dot">♡</span><p class="promise-text">To grow with you, laugh with you, and love you deeply.</p></div>
+    </div>
+  </div>
+
+  <div class="closing">
+    <p class="closing-main">"Here's to 3rd month, and every one after."</p>
+    <p class="closing-names">Sreyroth 🌸 Ream</p>
+    <div class="hearts-float"><span>🌷</span><span>💕</span><span>🌻</span><span>💕</span><span>🌹</span></div>
+  </div>
+
+  <!-- RADIO FINALE -->
+  <div class="radio-section">
+    <p class="radio-label-top">One last thing...</p>
+    <p class="radio-hint" id="radioHint">Click the radio 3 times, this is your favorite song! 🎵</p>
+
+    <div class="radio-stage" id="radioStage">
+      <div class="spark-container" id="sparkBox"></div>
+
+      <button class="radio-btn" id="radioBtn" onclick="handleClick()" aria-label="Click the radio to play a song">
+        <div class="radio-body" id="radioBody">
+          <div class="radio-emoji" id="radioEmoji">📻</div>
+          <div class="radio-sub" id="radioSub">Click me!</div>
+        </div>
+      </button>
+
+      <div class="click-dots" id="clickDots">
+        <div class="cdot" id="cd1"></div>
+        <div class="cdot" id="cd2"></div>
+        <div class="cdot" id="cd3"></div>
+      </div>
+
+      <div id="redirectMsg" style="display:none;" class="redirect-msg">🎵 Playing your song, Sreyroth... ♡</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${(Math.random()*3+2).toFixed(1)}s;--delay:${(Math.random()*4).toFixed(1)}s;`;
+    starsEl.appendChild(s);
+  }
+
+  const petalsEl = document.getElementById('petals');
+  const petalChars = ['🌸','🌹','💗','✿','❀'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petalChars[Math.floor(Math.random()*petalChars.length)];
+    const dur = (Math.random()*8+7).toFixed(1);
+    p.style.cssText = `left:${Math.random()*100}%;animation-duration:${dur}s;animation-delay:${(Math.random()*10).toFixed(1)}s;font-size:${Math.random()*10+10}px;`;
+    petalsEl.appendChild(p);
+  }
+
+  let clicks = 0, busy = false;
+  const btn = document.getElementById('radioBtn');
+  const radioBody = document.getElementById('radioBody');
+  const radioSub = document.getElementById('radioSub');
+  const radioHint = document.getElementById('radioHint');
+  const sparkBox = document.getElementById('sparkBox');
+  const stage = document.getElementById('radioStage');
+  const cdots = [document.getElementById('cd1'), document.getElementById('cd2'), document.getElementById('cd3')];
+  const sparkColors = ['#e8909a','#f9dde2','#f0b8c0','#ffd6e0','#fff','#c2858e','#ffaab8'];
+  const starChars = ['★','✦','✧','✶','✸','❋'];
+
+  function getCenter() {
+    const r = radioBody.getBoundingClientRect();
+    const sr = stage.getBoundingClientRect();
+    return { x: r.left - sr.left + r.width / 2, y: r.top - sr.top + r.height / 2 };
+  }
+
+  function spawnSparks(cx, cy, n) {
+    for (let i = 0; i < n; i++) {
+      const el = document.createElement('div');
+      el.className = 'spark';
+      const sz = Math.random() * 9 + 4;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.random() * 110 + 40;
+      el.style.cssText = `width:${sz}px;height:${sz}px;background:${sparkColors[Math.floor(Math.random()*sparkColors.length)]};left:${cx}px;top:${cy}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-delay:${(Math.random()*0.15).toFixed(2)}s;animation-duration:${(0.5+Math.random()*0.4).toFixed(2)}s;`;
+      sparkBox.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  function spawnStars(cx, cy) {
+    for (let i = 0; i < 8; i++) {
+      const el = document.createElement('div');
+      el.className = 'star-particle';
+      el.textContent = starChars[i % starChars.length];
+      el.style.cssText = `left:${cx}px;top:${cy}px;font-size:16px;color:${sparkColors[i%sparkColors.length]};--a:${i*45}deg;animation-delay:${(Math.random()*0.1).toFixed(2)}s;`;
+      sparkBox.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  function handleClick() {
+    if (busy || clicks >= 3) return;
+    busy = true;
+    clicks++;
+    cdots[clicks-1].classList.add('filled');
+
+    const labels = ['keep going...', 'one more...', ''];
+    radioSub.textContent = clicks < 3 ? labels[clicks-1] : '';
+
+    btn.classList.add('bouncing');
+    btn.addEventListener('animationend', () => btn.classList.remove('bouncing'), { once: true });
+
+    const c = getCenter();
+    spawnSparks(c.x, c.y, 16);
+    spawnStars(c.x, c.y);
+
+    if (clicks === 3) {
+      radioHint.style.opacity = '0';
+      setTimeout(() => {
+        btn.onclick = null;
+        btn.classList.add('exploding');
+        const c2 = getCenter();
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => { spawnSparks(c2.x, c2.y, 24); spawnStars(c2.x, c2.y); }, i * 110);
+        }
+        const msg = document.getElementById('redirectMsg');
+        msg.style.display = 'block';
+        setTimeout(() => { window.open('https://youtu.be/PzS3szHrhQY?t=190&si=66cVsvlb-kelO6gj', '_blank'); }, 1500);
+      }, 350);
+    } else {
+      setTimeout(() => busy = false, 750);
+    }
+  }
+</script>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="bgMusic" autoplay loop>
+  <source src="https://drive.google.com/uc?export=download&id=1UaZvJYxm5Avxp0daLVZq_uVDJDr5R0rh" type="audio/mpeg">
+</audio>
+
+<!-- MUTE BUTTON -->
+<button id="musicToggle" aria-label="Toggle music">
+  🔊
+</button>
+
+<style>
+  #musicToggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(232, 144, 154, 0.18);
+    border: 1px solid rgba(232, 144, 154, 0.35);
+    color: #f9dde2;
+    font-size: 22px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    transition: all 0.3s ease;
+  }
+
+  #musicToggle:hover {
+    transform: scale(1.08);
+    background: rgba(232, 144, 154, 0.28);
+  }
+
+  #musicToggle.muted {
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+
+  // Starting volume
+  bgMusic.volume = 0;
+
+  // Try autoplay
+  function startMusic() {
+    bgMusic.play().then(() => {
+      fadeInMusic();
+    }).catch(() => {
+      console.log("Autoplay blocked.");
+    });
+  }
+
+  // Smooth fade-in
+  function fadeInMusic() {
+    let vol = 0;
+
+    const fade = setInterval(() => {
+      if (vol < 0.35) {
+        vol += 0.02;
+        bgMusic.volume = vol;
+      } else {
+        clearInterval(fade);
+      }
+    }, 120);
+  }
+
+  startMusic();
+
+  // Mobile autoplay fallback
+  document.addEventListener('click', () => {
+    if (bgMusic.paused) {
+      bgMusic.play();
+      fadeInMusic();
+    }
+  }, { once: true });
+
+  // Mute toggle
+  musicToggle.addEventListener('click', () => {
+    bgMusic.muted = !bgMusic.muted;
+
+    if (bgMusic.muted) {
+      musicToggle.textContent = '🔇';
+      musicToggle.classList.add('muted');
+    } else {
+      musicToggle.textContent = '🔊';
+      musicToggle.classList.remove('muted');
+    }
+  });
+</script>
+</body>
+</html>
