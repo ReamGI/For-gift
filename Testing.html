@@ -71,8 +71,8 @@
   .spark { position: absolute; border-radius: 50%; pointer-events: none; animation: sparkfly 0.8s ease-out forwards; }
   @keyframes sparkfly { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
   .radio-btn { background: none; border: none; cursor: pointer; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-  .radio-btn:hover .radio-body { border-color: #f0b8c0; }
   .radio-body { width: 180px; height: 180px; border-radius: 50%; background: #1a0d10; border: 3px solid #e8909a; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: border-color 0.3s; }
+  .radio-btn:hover .radio-body { border-color: #f0b8c0; }
   .radio-emoji { font-size: 50px; line-height: 1; margin-bottom: 6px; }
   .radio-sub { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #e8909a; font-family: sans-serif; }
   .click-dots { display: flex; gap: 10px; margin-top: 20px; }
@@ -88,155 +88,7 @@
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
   @media (max-width: 480px) { .moments-grid { grid-template-columns: repeat(2, 1fr); } .names-row { gap: 12px; } .page { padding: 40px 20px 60px; } }
-
-  /* PHOTO SECTION STYLING */
-  .photo-section{
-    margin-bottom: 60px;
-    animation: fadeUp 1s ease 0.95s both;
-  }
-  .photo-title{
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    color: #f9dde2;
-    margin-bottom: 28px;
-    font-style: italic;
-  }
-  .photo-grid{
-    display:grid;
-    grid-template-columns: repeat(3,1fr);
-    gap:18px;
-  }
-  .photo-card{
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(232,144,154,0.15);
-    border-radius: 18px;
-    overflow:hidden;
-    transition: transform 0.3s ease;
-  }
-  .photo-card:hover{
-    transform: translateY(-5px);
-  }
-  .photo-placeholder{
-    width:100%;
-    aspect-ratio: 1 / 1.2;
-    overflow:hidden;
-    background: rgba(232,144,154,0.08);
-  }
-  .photo-placeholder img{
-    width:100%;
-    height:100%;
-    object-fit: cover;
-    display:block;
-  }
-  .photo-label{
-    padding:14px;
-    text-align:center;
-    font-size:16px;
-    color:#f0ccd2;
-    font-style:italic;
-  }
-  @media (max-width: 700px){
-    .photo-grid{
-      grid-template-columns:1fr;
-    }
-  }
-
-  /* UNMISSABLE REPLY CARD STYLING */
-  .reply-box-section {
-    margin-bottom: 60px;
-    animation: fadeUp 1s ease 1s both;
-  }
-  .reply-box-card {
-    background: rgba(232, 144, 154, 0.05);
-    border: 1px dashed rgba(232, 144, 154, 0.4);
-    border-radius: 20px;
-    padding: 30px 24px;
-    text-align: center;
-  }
-  .reply-box-icon {
-    font-size: 36px;
-    margin-bottom: 12px;
-    animation: heartbeat 2.5s ease-in-out infinite;
-  }
-  .reply-box-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: #f9dde2;
-    margin-bottom: 8px;
-    font-style: italic;
-  }
-  .reply-box-subtitle {
-    font-size: 15px;
-    color: #c2858e;
-    margin-bottom: 20px;
-    line-height: 1.5;
-  }
-  .open-note-btn {
-    background: #e8909a;
-    color: #0d0608;
-    border: none;
-    padding: 12px 28px;
-    font-family: sans-serif;
-    font-weight: bold;
-    font-size: 14px;
-    border-radius: 25px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(232, 144, 154, 0.2);
-    transition: all 0.3s ease;
-  }
-  .open-note-btn:hover {
-    transform: translateY(-2px);
-    background: #f0b8c0;
-    box-shadow: 0 6px 20px rgba(232, 144, 154, 0.3);
-  }
-
-  /* POPUP NOTEPAD OVERLAY STYLE */
-  .note-modal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(13, 6, 8, 0.75);
-    backdrop-filter: blur(6px);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 10000;
-    opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
-  }
-  .note-modal.active { opacity: 1; pointer-events: auto; }
-  .note-paper {
-    background: #fffef2;
-    background-image: linear-gradient(#f0edd5 1px, transparent 1px);
-    background-size: 100% 2.2rem;
-    width: 90%; max-width: 440px;
-    padding: 35px 30px 25px;
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    border-left: 4px double #e8909a;
-    transform: scale(0.9) translateY(10px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .note-modal.active .note-paper { transform: scale(1) translateY(0); }
-  .note-paper h3 {
-    margin-bottom: 20px;
-    font-family: 'Playfair Display', serif;
-    color: #403436; font-style: italic; font-size: 22px;
-  }
-  .note-paper textarea {
-    width: 100%; height: 160px;
-    background: transparent;
-    border: none; outline: none;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; line-height: 2.2rem;
-    resize: none; color: #2b2223; font-weight: 600;
-  }
-  .note-buttons { display: flex; justify-content: space-between; margin-top: 15px; }
-  .note-buttons button {
-    padding: 10px 20px; border: none; border-radius: 20px;
-    cursor: pointer; font-weight: bold; font-family: sans-serif; font-size: 13px; transition: transform 0.2s;
-  }
-  .note-buttons button:active { transform: scale(0.96); }
-  #sendNoteBtn { background: #e8909a; color: white; box-shadow: 0 4px 12px rgba(232,144,154,0.3); }
-  #closeNoteBtn { background: rgba(0,0,0,0.06); color: #615254; }
 </style>
-</head>
-<body>
 
 <div class="stars" id="stars"></div>
 <div class="petals-layer" id="petals"></div>
@@ -269,7 +121,7 @@
   </div>
 
   <div class="message-card">
-    <p class="message-quote">"At first I was just a guy who dislike talking, likely introverted. But one day I feeling more brave and start to open up. There, I saw your profile and you mentioned that you want a person that live in SiemReap so I try. That day I was busy at work so I didn't reply on time, luckily I did, otherwise we couldn't matched up. So then everyday when smoothly day after days. And now here we are!"</p>
+    <p class="message-quote">"At first I was just a guy who dislike talking, likely introverted. But one day I feeling more brave and start to open up. There, I saw your profile and you mentioned that you want a person that live in SiemReap so I try. That day I was busy at work so I didn't reply on time, luckily I did, otherwise we couldn't matched up. So then everyday went smoothly day after days. And now here we are!"</p>
     <p class="message-from">— So this is how it's started, haha</p>
   </div>
 
@@ -286,43 +138,97 @@
     <div class="moment-tile"><span class="moment-icon">🤝</span><div class="moment-title">Being There</div><div class="moment-desc">Through everything, always</div></div>
     <div class="moment-tile"><span class="moment-icon">✨</span><div class="moment-title">Just Us</div><div class="moment-desc">My favourite thing to be</div></div>
   </div>
+<!-- PHOTO MEMORIES -->
+<div class="photo-section">
 
-  <div class="photo-section">
-    <h2 class="photo-title">Our Little Memories ✨</h2>
+  <h2 class="photo-title">Our Little Memories ✨</h2>
 
-    <div class="photo-grid">
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <img src="images/Yes.jpeg" alt="Our Smile">
-        </div>
-        <p class="photo-label">Our Smile</p>
+  <div class="photo-grid">
+
+    <div class="photo-card">
+      <div class="photo-placeholder">
+        <img src="images/Yes.jpeg" alt="Our Smile">
       </div>
-
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <img src="images/IMG20260510182228.jpg" alt="My Favorite Smile">
-        </div>
-        <p class="photo-label">My Favorite Smile</p>
-      </div>
-
-      <div class="photo-card">
-        <div class="photo-placeholder">
-          <img src="images/IMG20260510182221.jpg" alt="To Forever">
-        </div>
-        <p class="photo-label">To Forever</p>
-      </div>
+      <p class="photo-label">Our Smile</p>
     </div>
-  </div>
 
-  <div class="reply-box-section">
-    <div class="reply-box-card">
-      <div class="reply-box-icon">✉️</div>
-      <h3 class="reply-box-title">Leave a Note for Me</h3>
-      <p class="reply-box-subtitle">I'd love to hear your thoughts, a favorite memory, or just a little hello. Click below to write back to me! ❤️</p>
-      <button id="easterEgg" class="open-note-btn">Write a Reply ✨</button>
+    <div class="photo-card">
+      <div class="photo-placeholder">
+        <img src="images/IMG20260510182228.jpg" alt="My Favorite Smile">
+      </div>
+      <p class="photo-label">My Favorite Smile</p>
     </div>
-  </div>
 
+    <div class="photo-card">
+      <div class="photo-placeholder">
+        <img src="images/IMG20260510182221.jpg" alt="To Forever">
+      </div>
+      <p class="photo-label">To Forever</p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.photo-section{
+  margin-bottom: 60px;
+  animation: fadeUp 1s ease 0.95s both;
+}
+
+.photo-title{
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #f9dde2;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:18px;
+}
+
+.photo-card{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(232,144,154,0.15);
+  border-radius: 18px;
+  overflow:hidden;
+  transition: transform 0.3s ease;
+}
+
+.photo-card:hover{
+  transform: translateY(-5px);
+}
+
+.photo-placeholder{
+  width:100%;
+  aspect-ratio: 1 / 1.2;
+  overflow:hidden;
+  background: rgba(232,144,154,0.08);
+}
+
+.photo-placeholder img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+.photo-label{
+  padding:14px;
+  text-align:center;
+  font-size:16px;
+  color:#f0ccd2;
+  font-style:italic;
+}
+
+@media (max-width: 700px){
+  .photo-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
   <div class="promise-section">
     <h2 class="section-title">What I promise you, Sreyroth</h2>
     <div class="promises">
@@ -338,7 +244,69 @@
     <p class="closing-names">Sreyroth 🌸 Ream</p>
     <div class="hearts-float"><span>🌷</span><span>💕</span><span>🌻</span><span>💕</span><span>🌹</span></div>
   </div>
+<!-- SMS REPLY SECTION -->
+<div class="sms-section">
+  <p class="radio-label-top" style="margin-top:64px;">Write back to him</p>
+  <h2 style="font-family:'Playfair Display',serif;font-size:26px;font-style:italic;color:#f9dde2;margin-bottom:8px;">A Letter for Ream 💌</h2>
+  <p style="font-size:16px;font-style:italic;color:#9a606a;margin-bottom:28px;">Send your heart in a message</p>
 
+  <div class="message-card" style="text-align:left;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(200,133,142,0.15);">
+      <span style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c2858e;">To</span>
+      <input id="phoneInput" type="tel" placeholder="Ream's phone number…"
+        style="flex:1;background:transparent;border:none;border-bottom:1px solid rgba(200,133,142,0.3);outline:none;color:#f9dde2;font-family:'Cormorant Garamond',serif;font-size:17px;padding:4px 8px;" />
+    </div>
+
+    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c2858e;margin-bottom:10px;">Quick words</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">
+      <span class="quick-pill" onclick="append('I love you so much 💕')">I love you so much 💕</span>
+      <span class="quick-pill" onclick="append('Happy 2 months, my favorite person 🌹')">Happy 2 months 🌹</span>
+      <span class="quick-pill" onclick="append('Thank you for choosing me every day ♡')">Thank you for choosing me ♡</span>
+      <span class="quick-pill" onclick="append('You make everything better 🌸')">You make everything better 🌸</span>
+    </div>
+
+    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c2858e;margin-bottom:10px;">Your message</p>
+    <textarea id="msgArea" oninput="updateCount()" placeholder="Type your heart out, Sreyroth…"
+      style="width:100%;background:transparent;border:none;outline:none;resize:none;color:#f0ccd2;font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.75;min-height:130px;"></textarea>
+    <p id="charCount" style="font-size:12px;color:#6a4a50;text-align:right;margin-top:4px;">0 characters</p>
+
+    <div style="text-align:center;margin-top:20px;">
+      <button onclick="sendSms()"
+        style="background:rgba(232,144,154,0.12);border:1px solid rgba(232,144,154,0.4);border-radius:50px;color:#f9dde2;font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;padding:14px 36px;cursor:pointer;">
+        Send via SMS 💌
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quick-pill{background:rgba(200,100,115,0.07);border:1px solid rgba(200,120,130,0.2);border-radius:50px;padding:6px 16px;font-size:13px;font-style:italic;color:#c2858e;cursor:pointer;transition:all 0.2s;}
+  .quick-pill:hover{background:rgba(232,144,154,0.15);border-color:#e8909a;color:#f0ccd2;}
+</style>
+
+<script>
+  function updateCount(){
+    const t=document.getElementById('msgArea').value;
+    document.getElementById('charCount').textContent=t.length+' character'+(t.length!==1?'s':'');
+  }
+  function append(text){
+    const a=document.getElementById('msgArea');
+    a.value=(a.value?a.value+' ':'')+text;
+    a.focus();updateCount();
+  }
+  function sendSms(){
+    const phone=document.getElementById('phoneInput').value.replace(/\s+/g,'');
+    const msg=document.getElementById('msgArea').value.trim();
+    if(!msg){alert('Write something first, Sreyroth 💕');return;}
+    const encoded=encodeURIComponent(msg);
+    const ua=navigator.userAgent;
+    let url=(/android/i.test(ua))
+      ?(phone?`sms:${phone}?body=${encoded}`:`sms:?body=${encoded}`)
+      :(phone?`sms:${phone}&body=${encoded}`:`sms:&body=${encoded}`);
+    window.location.href=url;
+  }
+</script>
+  <!-- RADIO FINALE -->
   <div class="radio-section">
     <p class="radio-label-top">One last thing...</p>
     <p class="radio-hint" id="radioHint">Click the radio 3 times, this is your favorite song! 🎵</p>
@@ -363,17 +331,6 @@
     </div>
   </div>
 
-</div>
-
-<div id="noteModal" class="note-modal">
-  <div class="note-paper">
-    <h3>A Little Note For Me... 📝</h3>
-    <textarea id="replyMessage" placeholder="Write down your thoughts or message back to me here..."></textarea>
-    <div class="note-buttons">
-      <button id="closeNoteBtn">Close</button>
-      <button id="sendNoteBtn">Send to Me ❤️</button>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -465,56 +422,20 @@
         }
         const msg = document.getElementById('redirectMsg');
         msg.style.display = 'block';
-        // FIXED: Using '_self' to redirect directly inside current page/view tab
-        setTimeout(() => { window.open('https://youtu.be/PzS3sZrHhQY?t=190&si=66cVsvlb-kelO6gj', '_self'); }, 1500);
+        setTimeout(() => { window.open('https://youtu.be/PzS3szHrhQY?t=190&si=66cVsvlb-kelO6gj', '_blank'); }, 1500);
       }, 350);
     } else {
       setTimeout(() => busy = false, 750);
     }
   }
-
-  /* NOTEBOX MODAL TRIGGER LOGIC */
-  const easterEgg = document.getElementById('easterEgg');
-  const noteModal = document.getElementById('noteModal');
-  const closeNoteBtn = document.getElementById('closeNoteBtn');
-  const sendNoteBtn = document.getElementById('sendNoteBtn');
-  const replyMessage = document.getElementById('replyMessage');
-
-  // Activate note popup
-  easterEgg.addEventListener('click', () => {
-    noteModal.classList.add('active');
-    replyMessage.focus();
-  });
-
-  // Close note popup
-  closeNoteBtn.addEventListener('click', () => {
-    noteModal.classList.remove('active');
-  });
-
-  // Pack up message data and dispatch via WhatsApp link directly inside current view
-  sendNoteBtn.addEventListener('click', () => {
-    const userMessage = replyMessage.value.trim();
-    if (userMessage === "") {
-      alert("Please write down something first! 🤍");
-      return;
-    }
-
-    // ⚠️ CRITICAL STEP: Remember to change the line below to your real phone number
-    // Formatted strictly as: Country Code + Digits (No spaces, no dashes, no '+' signs)
-    const personalNumber = "85560580760"; // <-- REPLACE THIS WITH YOUR NUMBER
-
-    const builtMessage = `Hey! Here is my little reply to your letter:\n\n"${userMessage}"`;
-    const encryptedText = encodeURIComponent(builtMessage);
-    
-    // Dispatches layout straight onto WhatsApp inside the same tab
-    window.open(`https://wa.me/${personalNumber}?text=${encryptedText}`, '_self');
-  });
 </script>
 
+<!-- BACKGROUND MUSIC -->
 <audio id="bgMusic" autoplay loop>
   <source src="audio/Who_knows.mp3" type="audio/mpeg">
 </audio>
 
+<!-- MUTE BUTTON -->
 <button id="musicToggle" aria-label="Toggle music">
   🔊
 </button>
@@ -537,10 +458,12 @@
     z-index: 9999;
     transition: all 0.3s ease;
   }
+
   #musicToggle:hover {
     transform: scale(1.08);
     background: rgba(232, 144, 154, 0.28);
   }
+
   #musicToggle.muted {
     opacity: 0.6;
   }
@@ -550,8 +473,10 @@
   const bgMusic = document.getElementById('bgMusic');
   const musicToggle = document.getElementById('musicToggle');
 
+  // Starting volume
   bgMusic.volume = 0;
 
+  // Try autoplay
   function startMusic() {
     bgMusic.play().then(() => {
       fadeInMusic();
@@ -560,8 +485,10 @@
     });
   }
 
+  // Smooth fade-in
   function fadeInMusic() {
     let vol = 0;
+
     const fade = setInterval(() => {
       if (vol < 0.35) {
         vol += 0.02;
@@ -574,6 +501,7 @@
 
   startMusic();
 
+  // Mobile autoplay fallback
   document.addEventListener('click', () => {
     if (bgMusic.paused) {
       bgMusic.play();
@@ -581,8 +509,8 @@
     }
   }, { once: true });
 
-  musicToggle.addEventListener('click', (e) => {
-    e.stopPropagation(); 
+  // Mute toggle
+  musicToggle.addEventListener('click', () => {
     bgMusic.muted = !bgMusic.muted;
 
     if (bgMusic.muted) {
