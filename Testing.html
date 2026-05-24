@@ -461,143 +461,144 @@
     }
   });
 </script>
-<!-- LETTER SAVE/VIEW SYSTEM -->
-<div id="letterPanel" style="
-  position:fixed; bottom:24px; left:24px; z-index:9999;
-  display:flex; flex-direction:column; align-items:flex-start; gap:10px;">
+<!-- LETTER PAGE OVERLAY -->
+<div id="letterOverlay" style="display:none; position:fixed; inset:0; z-index:99999;
+  background:#0d0608; font-family:'Cormorant Garamond',serif; overflow-y:auto;">
 
-  <!-- Saved letter view -->
-  <div id="letterBox" style="display:none;
-    background:rgba(13,6,8,0.95); border:1px solid rgba(232,144,154,0.4);
-    border-radius:16px; padding:24px; max-width:320px;
-    font-family:'Cormorant Garamond',serif; color:#f0ccd2; font-size:15px;
-    line-height:1.7; backdrop-filter:blur(12px);">
-    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;
-      color:#c2858e;margin-bottom:12px;">💌 Saved Letter</p>
-    <div id="letterContent"></div>
-    <p id="letterDate" style="margin-top:12px;font-size:12px;
-      color:#9a606a;font-style:italic;"></p>
+  <!-- HOME PAGE -->
+  <div class="lp-page" id="lp-home" style="display:flex;">
+    <div style="font-size:48px; margin-bottom:20px;">💌</div>
+    <p class="lp-tag">From Ream, with love</p>
+    <h1 class="lp-title">Letter Box</h1>
+    <p class="lp-sub">A place to put what words can't always say out loud</p>
+    <button class="lp-btn primary" onclick="lpShow('lp-write')">✍️ Write a letter to Ream</button>
+    <button class="lp-btn" onclick="lpShow('lp-view')">💌 Read saved letter</button>
+    <button class="lp-btn" onclick="closeLetter()" style="margin-top:20px; opacity:0.5;">✕ Close</button>
   </div>
 
-  <!-- Write area -->
-  <div id="writeBox" style="display:none;
-    background:rgba(13,6,8,0.95); border:1px solid rgba(232,144,154,0.4);
-    border-radius:16px; padding:24px; max-width:320px; width:320px;
-    font-family:'Cormorant Garamond',serif; backdrop-filter:blur(12px);">
-    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;
-      color:#c2858e;margin-bottom:12px;">✍️ Write Your Letter</p>
-    <textarea id="letterInput" placeholder="Write something to remember..." style="
-      width:100%; height:160px; background:rgba(255,255,255,0.04);
-      border:1px solid rgba(232,144,154,0.25); border-radius:10px;
-      color:#f0ccd2; font-family:'Cormorant Garamond',serif; font-size:15px;
-      line-height:1.7; padding:12px; resize:none; outline:none;"></textarea>
-    <button onclick="saveLetter()" style="
-      margin-top:12px; width:100%;
-      background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
-      color:#f9dde2; font-size:14px; padding:10px 16px; border-radius:50px;
-      cursor:pointer; font-family:'Cormorant Garamond',serif;">
-      💾 Save
-    </button>
+  <!-- WRITE PAGE -->
+  <div class="lp-page" id="lp-write" style="display:none;">
+    <button class="lp-back" onclick="lpShow('lp-home')">← back</button>
+    <p class="lp-tag">Dear Sreyroth...</p>
+    <h1 class="lp-title">Write your letter</h1>
+    <textarea id="lpInput" class="lp-textarea" placeholder="Write whatever is in your heart..."></textarea>
+    <button class="lp-btn primary" onclick="lpSave()">💾 Save letter</button>
+    <p id="lpSaveMsg" style="color:#e8909a; font-style:italic; font-size:15px; margin-top:12px; min-height:22px;"></p>
   </div>
 
-  <!-- Buttons -->
-  <div style="display:flex;gap:8px;">
-    <button onclick="toggleWrite()" style="
-      background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
-      color:#f9dde2; font-size:13px; padding:10px 16px; border-radius:50px;
-      cursor:pointer; backdrop-filter:blur(10px); font-family:'Cormorant Garamond',serif;">
-      ✍️ Write
-    </button>
-    <button onclick="viewLetter()" style="
-      background:rgba(232,144,154,0.18); border:1px solid rgba(232,144,154,0.35);
-      color:#f9dde2; font-size:13px; padding:10px 16px; border-radius:50px;
-      cursor:pointer; backdrop-filter:blur(10px); font-family:'Cormorant Garamond',serif;">
-      💌 View Saved
-    </button>
+  <!-- VIEW PAGE -->
+  <div class="lp-page" id="lp-view" style="display:none;">
+    <button class="lp-back" onclick="lpShow('lp-home')">← back</button>
+    <p class="lp-tag">Ream wrote...</p>
+    <h1 class="lp-title" style="margin-bottom:28px;">Your letter</h1>
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(232,144,154,0.2);
+      border-radius:20px; padding:36px; max-width:520px; width:100%; margin-bottom:24px;">
+      <p id="lpViewText" style="font-size:19px; font-style:italic; color:#f0ccd2;
+        line-height:1.9; margin-bottom:16px;">Loading...</p>
+      <p id="lpViewDate" style="font-size:13px; color:#9a606a;"></p>
+    </div>
+    <button class="lp-btn" onclick="lpShow('lp-write')">✍️ Edit letter</button>
   </div>
+
 </div>
 
-<script>
-  const JSONBIN_API_KEY = '$2a$10$3VIiKGEGoAEglQXHiOVlXO6QZWF8MePlaeNFMo8hHhkqdSbMn5uB2'; // ← your key here
-  const BIN_NAME = 'anniversary-letter';
+<!-- OPEN BUTTON (floating, above the mute button) -->
+<button onclick="openLetter()" style="position:fixed; bottom:86px; right:24px;
+  width:52px; height:52px; border-radius:50%; background:rgba(232,144,154,0.18);
+  border:1px solid rgba(232,144,154,0.35); color:#f9dde2; font-size:22px;
+  cursor:pointer; backdrop-filter:blur(10px); z-index:9999;" aria-label="Open letter box">
+  💌
+</button>
 
-  function toggleWrite() {
-    const wb = document.getElementById('writeBox');
-    const lb = document.getElementById('letterBox');
-    lb.style.display = 'none';
-    wb.style.display = wb.style.display === 'none' ? 'block' : 'none';
+<style>
+  .lp-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 28px;
+    text-align: center;
+    position: relative;
+  }
+  .lp-tag { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #c2858e; margin-bottom: 14px; }
+  .lp-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 6vw, 52px); font-style: italic; color: #f9dde2; margin-bottom: 10px; }
+  .lp-sub { font-size: 17px; font-style: italic; color: #9a606a; margin-bottom: 40px; max-width: 380px; line-height: 1.6; }
+  .lp-btn { background: rgba(232,144,154,0.12); border: 1px solid rgba(232,144,154,0.35); color: #f9dde2; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; padding: 14px 40px; border-radius: 50px; cursor: pointer; transition: all 0.3s; margin: 6px; }
+  .lp-btn:hover { background: rgba(232,144,154,0.25); }
+  .lp-btn.primary { background: rgba(232,144,154,0.22); border-color: rgba(232,144,154,0.6); }
+  .lp-back { position: absolute; top: 24px; left: 28px; background: none; border: none; color: #c2858e; font-family: 'Cormorant Garamond', serif; font-size: 16px; cursor: pointer; font-style: italic; }
+  .lp-textarea { width: 100%; max-width: 520px; height: 220px; background: rgba(255,255,255,0.04); border: 1px solid rgba(232,144,154,0.25); border-radius: 16px; color: #f0ccd2; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; line-height: 1.85; padding: 20px; resize: none; outline: none; margin-bottom: 22px; }
+  .lp-textarea::placeholder { color: #5a3540; }
+</style>
+
+<script>
+  const LP_API_KEY = '$2a$10$3VIiKGEGoAEglQXHiOVlXO6QZWF8MePlaeNFMo8hHhkqdSbMn5uB2'; // ← paste your new key after regenerating
+  const LP_BIN_NAME = 'anniversary-letter';
+
+  function openLetter() {
+    document.getElementById('letterOverlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
   }
 
-  async function saveLetter() {
-    const text = document.getElementById('letterInput').value.trim();
-    if (!text) { alert('Write something first! 💌'); return; }
+  function closeLetter() {
+    document.getElementById('letterOverlay').style.display = 'none';
+    document.body.style.overflow = '';
+  }
 
-    const letterData = {
+  function lpShow(id) {
+    document.querySelectorAll('.lp-page').forEach(p => p.style.display = 'none');
+    document.getElementById(id).style.display = 'flex';
+    if (id === 'lp-view') lpLoad();
+  }
+
+  async function lpSave() {
+    const text = document.getElementById('lpInput').value.trim();
+    if (!text) { document.getElementById('lpSaveMsg').textContent = 'Write something first 💕'; return; }
+    const data = {
       savedOn: new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }),
       message: text
     };
-
     try {
-      const existingId = localStorage.getItem('letterBinId');
-
+      const existingId = localStorage.getItem('lpBinId');
       if (existingId) {
-        // Update existing bin
         await fetch(`https://api.jsonbin.io/v3/b/${existingId}`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': JSONBIN_API_KEY
-          },
-          body: JSON.stringify(letterData)
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': LP_API_KEY },
+          body: JSON.stringify(data)
         });
       } else {
-        // Create new bin
         const res = await fetch('https://api.jsonbin.io/v3/b', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': JSONBIN_API_KEY,
-            'X-Bin-Name': BIN_NAME,
-            'X-Bin-Private': 'false'
-          },
-          body: JSON.stringify(letterData)
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': LP_API_KEY, 'X-Bin-Name': LP_BIN_NAME, 'X-Bin-Private': 'false' },
+          body: JSON.stringify(data)
         });
-        const data = await res.json();
-        localStorage.setItem('letterBinId', data.metadata.id);
+        const json = await res.json();
+        localStorage.setItem('lpBinId', json.metadata.id);
       }
-
-      alert('💌 Letter saved!');
-      document.getElementById('writeBox').style.display = 'none';
+      document.getElementById('lpSaveMsg').textContent = '✓ Letter saved!';
+      setTimeout(() => document.getElementById('lpSaveMsg').textContent = '', 3000);
     } catch (e) {
-      alert('Could not save. Check your API key.');
-      console.error(e);
+      document.getElementById('lpSaveMsg').textContent = 'Could not save. Check API key.';
     }
   }
 
-  async function viewLetter() {
-    const binId = localStorage.getItem('letterBinId');
-    if (!binId) { alert('No saved letter yet. Click ✍️ Write first!'); return; }
-
-    const wb = document.getElementById('writeBox');
-    wb.style.display = 'none';
-
+  async function lpLoad() {
+    const binId = localStorage.getItem('lpBinId');
+    if (!binId) {
+      document.getElementById('lpViewText').textContent = 'No letter saved yet. Write one first! 💕';
+      document.getElementById('lpViewDate').textContent = '';
+      return;
+    }
     try {
       const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-        headers: { 'X-Master-Key': JSONBIN_API_KEY }
+        headers: { 'X-Master-Key': LP_API_KEY }
       });
-      const data = await res.json();
-      const letter = data.record;
-
-      document.getElementById('letterContent').innerHTML = `
-        <p style="font-style:italic;line-height:1.8;">"${letter.message}"</p>
-      `;
-      document.getElementById('letterDate').textContent = `Saved on ${letter.savedOn}`;
-
-      const box = document.getElementById('letterBox');
-      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      const json = await res.json();
+      document.getElementById('lpViewText').textContent = `"${json.record.message}"`;
+      document.getElementById('lpViewDate').textContent = `Saved on ${json.record.savedOn}`;
     } catch (e) {
-      alert('Could not load letter.');
-      console.error(e);
+      document.getElementById('lpViewText').textContent = 'Could not load letter.';
     }
   }
 </script>
